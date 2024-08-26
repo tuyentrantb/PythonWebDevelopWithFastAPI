@@ -25,6 +25,8 @@ pip install "uvicorn[standard]"
 pip install sqlalchemy
 pip install psycopg2-binary
 pip install alembic
+pip install passlib
+pip install asyncpg
 ```
 
 - Configure `.env` file by creating a copy from `.env.sample`
@@ -32,11 +34,7 @@ pip install alembic
 
 ```bash
 docker run -p 5432:5432 --name postgres -e POSTGRES_PASSWORD=<your-preferred-one> -d postgres:14
-```
 
-- At `app` directory, run `alembic` migration command. Please make sure your postgres DB is ready and accessible. In case you want to use `SQLite` instead, please be sure to configure the `env.py` file in `alembic` folder to support `batch execution` since `SQLite` does not support `ALTER` command, which is needed to configure the foreign key and establish the indexes.
-
-```bash
 # Init alembic folder
 alembic init alembic
 
