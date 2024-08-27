@@ -11,15 +11,13 @@ A FastAPI sample application to learn how to use FastAPI with SQLAlchemy and Pos
 pip install virtualenv
 
 # Generate virtual environment
-virtualenv --python=<your-python-runtime-version> venv
+virtualenv --python=3.11.9 venv
 
 # Activate virtual environment
 source venv/bin/activate # on Mac/Linux
 venv\Scripts\activate # on Windows
 
 # Install depdendency packages
-pip freeze > requirements.txt # export dependencies package to requirements file
-# pip install -r requirements.txt
 pip install fastapi
 pip install "uvicorn[standard]"
 pip install sqlalchemy
@@ -27,6 +25,12 @@ pip install psycopg2-binary
 pip install alembic
 pip install passlib
 pip install asyncpg
+pip install python-jose
+pip install python-multipart
+pip install pylint
+# export dependencies package to requirements file
+# pip freeze > requirements.txt
+# pip install -r requirements.txt
 ```
 
 - Configure `.env` file by creating a copy from `.env.sample`

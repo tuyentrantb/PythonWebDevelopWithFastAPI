@@ -15,5 +15,4 @@ class Company(BaseEntity, Base):
     description = Column(String)
     rating = Column(SmallInteger, nullable=False, default=0)
     mode = Column(Enum(CompanyMode), nullable=False, default=CompanyMode.DRAFT)
-    
-    users = relationship("User", back_populates="company")
+    users = relationship("User", primaryjoin="Company.id == User.company_id")
