@@ -28,12 +28,21 @@ pip install asyncpg
 pip install python-jose
 pip install python-multipart
 pip install pylint
+pip install bcrypt
 # export dependencies package to requirements file
 # pip freeze > requirements.txt
 # pip install -r requirements.txt
 ```
 
 - Configure `.env` file by creating a copy from `.env.sample`
+- Generate JWT secret
+
+```bash
+python
+import secrets
+secrets.token_hex(16)
+```
+
 - Setup a postgres docker container
 
 ```bash

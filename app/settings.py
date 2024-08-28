@@ -22,7 +22,7 @@ def get_connection_string(async_mode: bool = False) -> str:
 SQLALCHEMY_DATABASE_URL = get_connection_string()
 SQLALCHEMY_DATABASE_URL_ASYNC = get_connection_string(async_mode=True)
 
-ADMIN_DEFAULT_PASSWORD = os.environ.get("DEFAULT_PASSWORD")
+DEFAULT_PASSWORD = os.environ.get("DEFAULT_PASSWORD")
 
 # JWT Setting
 JWT_SECRET = os.environ.get("JWT_SECRET")

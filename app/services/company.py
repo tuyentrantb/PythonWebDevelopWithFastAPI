@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy.ext.asyncio import AsyncSession
 from schemas import Company
 from models import CompanyModel
-#from services.exception import ResourceNotFoundError
+from services.exception import ResourceNotFoundError
 
 async def get_companies(async_db: AsyncSession) -> list[Company]:
     result = await async_db.scalars(select(Company))
@@ -25,8 +25,8 @@ def add_new_company(db: Session, data: CompanyModel) -> Company:
 def update_company(db: Session, id: UUID, data: CompanyModel) -> Company:
     company = get_company_by_id(db, id)
 
-    # if company is None:
-    #     raise ResourceNotFoundError()
+    if company is None:
+        raise ResourceNotFoundError()
     company.name = data.name
     company.description = data.description
     company.mode = data.mode
