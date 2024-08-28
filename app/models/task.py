@@ -12,21 +12,14 @@ class SearchTaskModel():
         self.page = page
         self.size = size
 
-class TaksModel(BaseModel):
+class TaskModel(BaseModel):
     summary: str
     description: Optional[str]
     status: TaskStatus = Field(default=TaskStatus.NEW)
     priority: int = Field(ge=0, le=10, default=0)
     user_id: UUID
     class Config:
-        json_schema_extra = {
-            "example": {
-                "summary": "Task 1",
-                "description": "Description for Task 1",
-                "status": "NEW",
-                "priority": 1
-            }
-        }
+        from_attributes = True
 
 class TaskViewModel(BaseModel):
     id: UUID
@@ -34,7 +27,6 @@ class TaskViewModel(BaseModel):
     description: str | None = None
     priority: int
     user_id: UUID
-    user: UserViewModel
 
     class Config:
         from_attributes = True

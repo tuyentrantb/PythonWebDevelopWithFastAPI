@@ -19,8 +19,8 @@ async def get_all_users(async_db: AsyncSession = Depends(get_async_db_context)):
 @router.get("/{company_id}/staff",\
     status_code=status.HTTP_200_OK, response_model=List[UserViewModel])
 async def get_users_company(company_id: UUID,\
-    async_db: AsyncSession = Depends(get_async_db_context)):
-    return await UserService.get_users_by_company_id(async_db, company_id)
+    db: Session=Depends(get_db_context)):
+    return UserService.get_users_by_company_id(db, company_id)
 
 @router.get("/{user_id}", response_model=UserViewModel)
 async def get_user_detail(user_id: UUID, db: Session=Depends(get_db_context)):

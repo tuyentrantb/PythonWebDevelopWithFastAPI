@@ -17,7 +17,7 @@ def get_users_by_company_id(db: Session, id: UUID) -> list[User]:
     company = CompanyService.get_company_by_id(db, id)
     if company is None:
         raise InvalidInputError("Invalid company information")
-    query = select(User).filter(User.company_id == id, User.is_active is True)
+    query = select(User).filter(User.company_id == id, User.is_active == True)
     return db.scalars(query).all()
 
 def get_user_by_id(db: Session, id: UUID) -> User:
