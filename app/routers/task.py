@@ -1,13 +1,11 @@
 from typing import List
 from uuid import UUID
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Query
 from starlette import status
 from sqlalchemy.orm import Session
-from sqlalchemy.ext.asyncio import AsyncSession
-
 from schemas import User
-from database import get_db_context, get_async_db_context
-from models import TaskViewModel, TaskModel
+from database import get_db_context
+from models import TaskViewModel, TaskModel, SearchTaskModel
 from services import task as TaskService
 from services import auth as AuthService
 from services.exception import AccessDeniedError
@@ -15,8 +13,15 @@ from services.exception import AccessDeniedError
 router = APIRouter(prefix="/tasks", tags=["Tasks"])
 
 @router.get("", status_code=status.HTTP_200_OK, response_model=List[TaskViewModel])
-async def get_all_tasks(async_db: AsyncSession = Depends(get_async_db_context)):
-    return await TaskService.get_tasks(async_db)
+async def get_all_tasks(
+    summary: str = Query(default=None),
+    description: str = Query(default=None),
+    priority: int = Query(default=None),
+    page: int = Query(ge=1, default=1),
+    size: int = Query(ge=1, le=50, default=10),
+    db: Session = Depends(get_db_context)):
+    conds = SearchTaskModel(summary, description, priority, page, size)
+    return TaskService.get_tasks(db, conds)
 
 @router.get("/{user_id}/assignments",\
     status_code=status.HTTP_200_OK, response_model=List[TaskViewModel])

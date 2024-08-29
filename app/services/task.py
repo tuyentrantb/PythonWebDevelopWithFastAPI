@@ -1,15 +1,25 @@
 from uuid import UUID
 from sqlalchemy import select
-from sqlalchemy.orm import Session
-from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import Session, joinedload
 from schemas import Task
-from models import TaskModel
+from models import TaskModel, SearchTaskModel
 from services.exception import ResourceNotFoundError, InvalidInputError
 from services import user as UserService
 
-async def get_tasks(async_db: AsyncSession) -> list[Task]:
-    result = await async_db.scalars(select(Task))
-    return result.all()
+def get_tasks(db: Session, conds: SearchTaskModel) -> list[Task]:
+    query = select(Task).options(
+        joinedload(Task.user, innerjoin=True))
+    
+    if conds.summary is not None:
+        query = query.filter(Task.summary.like(f"{conds.summary}%"))
+    if conds.description is not None:
+        query = query.filter(Task.description.like(f"{conds.description}%"))
+    if conds.priority is not None:
+        query = query.filter(Task.priority == conds.priority)
+    
+    query.offset((conds.page-1)*conds.size).limit(conds.size)
+    
+    return db.scalars(query).all()
 
 def get_tasks_by_user_id(db: Session, id: UUID) -> list[Task]:
     user = UserService.get_user_by_id(db, id)

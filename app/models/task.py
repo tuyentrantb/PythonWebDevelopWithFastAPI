@@ -4,9 +4,9 @@ from pydantic import BaseModel, Field
 from schemas import TaskStatus
 
 class SearchTaskModel():
-    def __init__(self, summary, user_id, priority, page, size) -> None:
+    def __init__(self, summary, description, priority, page, size) -> None:
         self.summary = summary
-        self.user_id = user_id
+        self.description = description
         self.priority = priority
         self.page = page
         self.size = size
