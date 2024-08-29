@@ -25,10 +25,13 @@ def upgrade() -> None:
         sa.Column('description', sa.String),
         sa.Column('status', sa.Enum(TaskStatus), nullable=False, default=TaskStatus.NEW),
         sa.Column('priority', sa.SmallInteger, default=0),
-        sa.Column('user_id', sa.UUID, nullable=False)
+        sa.Column('user_id', sa.UUID, nullable=False),
+        sa.Column('created_at', sa.DateTime),
+        sa.Column('updated_at', sa.DateTime)
     )
     op.create_foreign_key('fk_task_user', 'tasks', 'users', ['user_id'], ['id'])
 
 def downgrade() -> None:
     op.drop_table('tasks')
+    op.execute("DROP TYPE taskstatus;")
 

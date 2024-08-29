@@ -18,7 +18,7 @@ class User(BaseEntity, Base):
     is_admin = Column(Boolean, default=False)
     company_id = Column(Uuid, ForeignKey("companies.id"))
     tasks = relationship("Task", primaryjoin="User.id == Task.user_id")
- 
+
 def get_password_hash(password):
     return bcrypt_context.hash(password)
 

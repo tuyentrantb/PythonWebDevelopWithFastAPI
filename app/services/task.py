@@ -5,6 +5,7 @@ from schemas import Task
 from models import TaskModel, SearchTaskModel
 from services.exception import ResourceNotFoundError, InvalidInputError
 from services import user as UserService
+from services import utils
 
 def get_tasks(db: Session, conds: SearchTaskModel) -> list[Task]:
     query = select(Task).options(
@@ -41,6 +42,9 @@ def add_new_task(db: Session, data: TaskModel) -> Task:
     user = UserService.get_user_by_id(db, task.user_id)
     if user is None:
         raise InvalidInputError("Invalid user")
+    
+    task.created_at = utils.get_current_utc_time()
+    task.updated_at = utils.get_current_utc_time()
 
     db.add(task)
     db.commit()
@@ -56,6 +60,7 @@ def update_task(db: Session, id: UUID, data: TaskModel) -> Task:
     task.description = data.description
     task.priority = data.priority
     task.status = data.status
+    task.updated_at = utils.get_current_utc_time()
     db.commit()
     db.refresh(task)
     return task

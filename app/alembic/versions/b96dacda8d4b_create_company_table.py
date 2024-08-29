@@ -24,9 +24,12 @@ def upgrade() -> None:
         sa.Column('name', sa.String, nullable=False),
         sa.Column('description', sa.String),
         sa.Column('mode', sa.Enum(CompanyMode), nullable=False, default=CompanyMode.DRAFT),
-        sa.Column('rating', sa.SmallInteger, default=0)
+        sa.Column('rating', sa.SmallInteger, default=0),
+        sa.Column('created_at', sa.DateTime),
+        sa.Column('updated_at', sa.DateTime)
     )
 
 
 def downgrade() -> None:
     op.drop_table('companies')
+    op.execute("DROP TYPE companymode;")

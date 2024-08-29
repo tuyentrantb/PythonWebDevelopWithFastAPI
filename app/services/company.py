@@ -4,6 +4,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy.ext.asyncio import AsyncSession
 from schemas import Company
 from models import CompanyModel
+from services import utils
 from services.exception import ResourceNotFoundError
 
 async def get_companies(async_db: AsyncSession) -> list[Company]:
@@ -19,6 +20,8 @@ def get_company_by_id(db: Session, id: UUID) -> Company:
 
 def add_new_company(db: Session, data: CompanyModel) -> Company:
     company = Company(**data.model_dump())
+    company.created_at = utils.get_current_utc_time()
+    company.updated_at = utils.get_current_utc_time()
 
     db.add(company)
     db.commit()
@@ -34,6 +37,7 @@ def update_company(db: Session, id: UUID, data: CompanyModel) -> Company:
     company.description = data.description
     company.mode = data.mode
     company.rating = data.rating
+    company.updated_at = utils.get_current_utc_time()
     db.commit()
     db.refresh(company)
     return company

@@ -7,6 +7,7 @@ from schemas.user import get_password_hash
 from models import UserModel
 from services.exception import ResourceNotFoundError, InvalidInputError
 from services import company as CompanyService
+from services import utils
 from settings import DEFAULT_PASSWORD
 
 async def get_users(async_db: AsyncSession) -> list[User]:
@@ -29,12 +30,14 @@ def get_user_by_id(db: Session, id: UUID) -> User:
 
 def add_new_user(db: Session, data: UserModel) -> User:
     user = User(**data.model_dump())
-    user.hashed_password = get_password_hash(DEFAULT_PASSWORD)
-    user.is_active = True
-    user.is_admin = False
     company = CompanyService.get_company_by_id(db, user.company_id)
     if company is None:
         raise InvalidInputError("Invalid company information")
+    user.hashed_password = get_password_hash(DEFAULT_PASSWORD)
+    user.is_active = True
+    user.is_admin = False
+    user.created_at = utils.get_current_utc_time()
+    user.updated_at = utils.get_current_utc_time()
 
     db.add(user)
     db.commit()
@@ -49,6 +52,7 @@ def update_user(db: Session, id: UUID, data: UserModel) -> User:
     user.email = data.email
     user.first_name = data.first_name
     user.last_name = data.last_name
+    user.updated_at = utils.get_current_utc_time()
     db.commit()
     db.refresh(user)
     return user

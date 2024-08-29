@@ -8,6 +8,7 @@ Create Date: 2024-08-26 17:53:29.093633
 from uuid import uuid4
 from alembic import op
 import sqlalchemy as sa
+from datetime import datetime, timezone
 from schemas.user import get_password_hash
 from settings import DEFAULT_PASSWORD
 
@@ -29,7 +30,9 @@ def upgrade() -> None:
         sa.Column("hashed_password", sa.String),
         sa.Column("is_active", sa.Boolean, default=True),
         sa.Column("is_admin", sa.Boolean, default=False),
-        sa.Column('company_id', sa.UUID, nullable=True)
+        sa.Column('company_id', sa.UUID, nullable=True),
+        sa.Column('created_at', sa.DateTime),
+        sa.Column('updated_at', sa.DateTime)
     )
     op.create_index("idx_usr_fst_lst_name", "users", ["first_name", "last_name"])
     op.create_foreign_key('fk_user_company', 'users', 'companies', ['company_id'], ['id'])
@@ -44,7 +47,9 @@ def upgrade() -> None:
             "first_name": "FastApi",
             "last_name": "Admin",
             "is_active": True,
-            "is_admin": True
+            "is_admin": True,
+            "created_at": datetime.now(timezone.utc),
+            "updated_at": datetime.now(timezone.utc)
         }
     ])
 
