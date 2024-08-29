@@ -2,7 +2,6 @@ from typing import Optional
 from uuid import UUID
 from pydantic import BaseModel, Field
 from schemas import TaskStatus
-from models import UserViewModel
 
 class SearchTaskModel():
     def __init__(self, summary, user_id, priority, page, size) -> None:

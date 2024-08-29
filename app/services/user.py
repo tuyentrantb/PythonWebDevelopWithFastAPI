@@ -22,7 +22,10 @@ def get_users_by_company_id(db: Session, id: UUID) -> list[User]:
 
 def get_user_by_id(db: Session, id: UUID) -> User:
     query = select(User).filter(User.id == id)
-    return db.scalars(query).first()
+    user = db.scalars(query).first()
+    if user is None:
+        raise ResourceNotFoundError()
+    return user
 
 def add_new_user(db: Session, data: UserModel) -> User:
     user = User(**data.model_dump())

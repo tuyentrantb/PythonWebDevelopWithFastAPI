@@ -21,7 +21,10 @@ def get_tasks_by_user_id(db: Session, id: UUID) -> list[Task]:
 
 def get_task_by_id(db: Session, id: UUID) -> Task:
     query = select(Task).filter(Task.id == id)
-    return db.scalars(query).first()
+    task = db.scalars(query).first()
+    if task is None:
+        raise ResourceNotFoundError()
+    return task
 
 def add_new_task(db: Session, data: TaskModel) -> Task:
     task = Task(**data.model_dump())

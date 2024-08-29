@@ -12,7 +12,10 @@ async def get_companies(async_db: AsyncSession) -> list[Company]:
 
 def get_company_by_id(db: Session, id: UUID) -> Company:
     query = select(Company).filter(Company.id == id)
-    return db.scalars(query).first()
+    company = db.scalars(query).first()
+    if company is None:
+        raise ResourceNotFoundError()
+    return company
 
 def add_new_company(db: Session, data: CompanyModel) -> Company:
     company = Company(**data.model_dump())
