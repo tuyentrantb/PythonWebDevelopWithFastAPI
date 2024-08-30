@@ -29,6 +29,8 @@ pip install python-jose
 pip install python-multipart
 pip install pylint
 pip install bcrypt
+pip install httpx
+pip install pytest
 # export dependencies package to requirements file
 # pip freeze > requirements.txt
 # pip install -r requirements.txt
@@ -69,3 +71,7 @@ alembic revision -m <comment>
 ```bash
 uvicorn main:app --reload
 ```
+
+# Unit test with httpx
+
+- Run `pytest` to excute unit tests

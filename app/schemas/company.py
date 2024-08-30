@@ -1,13 +1,14 @@
 import enum
 from sqlalchemy import Column, String, Enum, SmallInteger
 from sqlalchemy.orm import relationship
+
 from schemas.base_entity import BaseEntity
 from database import Base
 
 class CompanyMode(enum.Enum):
     DRAFT = 'D'
     PUBLISHED = 'P'
-    
+
 class Company(BaseEntity, Base):
     __tablename__ = "companies"
 

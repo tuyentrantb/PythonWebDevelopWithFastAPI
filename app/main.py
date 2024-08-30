@@ -1,5 +1,5 @@
-# pylint: disable=missing-module-docstring
 from fastapi import FastAPI
+
 from routers import auth, user, company, task
 
 app = FastAPI()

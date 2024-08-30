@@ -1,10 +1,12 @@
 from typing import List
 from uuid import UUID
 from fastapi import APIRouter, Depends, Query
+from sqlalchemy import null
 from starlette import status
 from sqlalchemy.orm import Session
-from schemas import User
 from database import get_db_context
+
+from schemas import User
 from models import TaskViewModel, TaskModel, SearchTaskModel
 from services import task as TaskService
 from services import auth as AuthService
@@ -19,8 +21,12 @@ async def get_all_tasks(
     priority: int = Query(default=None),
     page: int = Query(ge=1, default=1),
     size: int = Query(ge=1, le=50, default=10),
+    user: User = Depends(AuthService.token_interceptor),
     db: Session = Depends(get_db_context)):
-    conds = SearchTaskModel(summary, description, priority, page, size)
+    user_id = null
+    if not user.is_admin:
+        user_id = user.id
+    conds = SearchTaskModel(summary, description, priority, user_id, page, size)
     return TaskService.get_tasks(db, conds)
 
 @router.get("/{user_id}/assignments",\

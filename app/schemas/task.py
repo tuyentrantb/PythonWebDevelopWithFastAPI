@@ -1,6 +1,7 @@
 import enum
 from sqlalchemy import Column, String, Enum, SmallInteger, ForeignKey, Uuid
 from sqlalchemy.orm import relationship
+
 from schemas.base_entity import BaseEntity
 from database import Base
 

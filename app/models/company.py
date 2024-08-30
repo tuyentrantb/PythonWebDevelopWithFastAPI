@@ -1,6 +1,7 @@
 from typing import Optional
 from uuid import UUID
 from pydantic import BaseModel, Field
+
 from schemas import CompanyMode
 
 class SearchCompanyModel():
@@ -15,14 +16,7 @@ class CompanyModel(BaseModel):
     rating: int = Field(ge=0, le=5, default=0)
     mode: CompanyMode = Field(default=CompanyMode.DRAFT)
     class Config:
-        json_schema_extra = {
-            "example": {
-                "name": "Company 1",
-                "description": "Description for Company 1",
-                "rating": 4,
-                "mode": "D"
-            }
-        }
+        from_attributes = True
 
 class CompanyViewModel(BaseModel):
     id: UUID

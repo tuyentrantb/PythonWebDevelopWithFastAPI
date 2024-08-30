@@ -1,8 +1,9 @@
 from sqlalchemy import Boolean, Column, String, ForeignKey, Uuid
 from sqlalchemy.orm import relationship
+from passlib.context import CryptContext
+
 from schemas.base_entity import BaseEntity
 from database import Base
-from passlib.context import CryptContext
 
 bcrypt_context = CryptContext(schemes=["bcrypt"])
 

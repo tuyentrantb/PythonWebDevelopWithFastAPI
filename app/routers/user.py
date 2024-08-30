@@ -4,8 +4,8 @@ from fastapi import APIRouter, Depends
 from starlette import status
 from sqlalchemy.orm import Session
 from sqlalchemy.ext.asyncio import AsyncSession
-
 from database import get_db_context, get_async_db_context
+
 from models import UserViewModel, UserModel
 from schemas import User
 from services import user as UserService
